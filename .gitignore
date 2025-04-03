@@ -1,0 +1,6 @@
+bin/
+obj/
+packages/
+.idea/
+_ReSharper.Caches/
+appsettings*.json
