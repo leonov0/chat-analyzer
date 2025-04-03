@@ -9,6 +9,9 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY ["ChatAnalyzer.Presentation/ChatAnalyzer.Presentation.csproj", "ChatAnalyzer.Presentation/"]
+COPY ["ChatAnalyzer.Application/ChatAnalyzer.Application.csproj", "ChatAnalyzer.Application/"]
+COPY ["ChatAnalyzer.Domain/ChatAnalyzer.Domain.csproj", "ChatAnalyzer.Domain/"]
+COPY ["ChatAnalyzer.Infrastructure/ChatAnalyzer.Infrastructure.csproj", "ChatAnalyzer.Infrastructure/"]
 RUN dotnet restore "ChatAnalyzer.Presentation/ChatAnalyzer.Presentation.csproj"
 COPY . .
 WORKDIR "/src/ChatAnalyzer.Presentation"
