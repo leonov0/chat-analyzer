@@ -18,7 +18,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         {
             await authService.RegisterAsync(registerDto.Username, registerDto.Email, registerDto.Password);
 
-            return Ok();
+            return Created();
         }
         catch (EmailTakenException ex)
         {
