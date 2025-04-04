@@ -33,8 +33,10 @@ public class AuthService(
 
         if (!result.Succeeded)
         {
-            var errors = string.Join(". ", result.Errors.Select(error => error.Description));
-            logger.LogError("Registration failed for user {user}: {errors}.", user, errors);
+            result.Errors.ToList().ForEach(error => logger.LogError(
+                "User registration failed. Username: {username}. Email: {email}. Error: {code} - {description}",
+                username, email, error.Code, error.Description));
+
             throw new Exception("Registration failed.");
         }
 
