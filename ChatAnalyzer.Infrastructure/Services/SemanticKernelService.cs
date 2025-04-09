@@ -1,30 +1,24 @@
-﻿using ChatAnalyzer.Infrastructure.Options;
+﻿using System.Net.Http.Json;
+using ChatAnalyzer.Infrastructure.Options;
+using ChatAnalyzer.Infrastructure.Responses;
 using Microsoft.Extensions.Options;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace ChatAnalyzer.Infrastructure.Services;
 
-public class SemanticKernelService
+public class SemanticKernelService(IOptions<GeminiOptions> options)
 {
-    private readonly Kernel _kernel;
-
-    public SemanticKernelService(IOptions<AzureOpenAIOptions> config)
+    private readonly HttpClient _httpClient = new()
     {
-        var options = config.Value;
+        BaseAddress = new Uri(options.Value.Endpoint)
+    };
 
-        _kernel = Kernel.CreateBuilder()
-            .AddAzureOpenAIChatCompletion(
-                options.DeploymentName,
-                options.Endpoint,
-                options.ApiKey)
-            .Build();
-    }
-
-    public async Task<string?> AskAsync(string prompt)
+    public async Task<string?> GenerateReplyAsync(string prompt)
     {
-        var chat = _kernel.GetRequiredService<IChatCompletionService>();
-        var result = await chat.GetChatMessageContentAsync(new ChatHistory(prompt));
-        return result.Content;
+        var body = new { contents = new[] { new { parts = new[] { new { text = prompt } } } } };
+        var response = await _httpClient.PostAsJsonAsync($"?key={options.Value.ApiKey}", body);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<GeminiResponse>();
+        return result?.Candidates.FirstOrDefault()?.Content.Parts.FirstOrDefault()?.Text;
     }
 }

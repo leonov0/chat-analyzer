@@ -1,4 +1,5 @@
-﻿using ChatAnalyzer.Domain.Entities;
+﻿using ChatAnalyzer.Application.Interfaces;
+using ChatAnalyzer.Domain.Entities;
 using ChatAnalyzer.Infrastructure.Options;
 using ChatAnalyzer.Infrastructure.Persistence;
 using ChatAnalyzer.Infrastructure.Services;
@@ -24,9 +25,11 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        services.Configure<AzureOpenAIOptions>(configuration.GetSection(nameof(AzureOpenAIOptions)));
+        services.Configure<GeminiOptions>(configuration.GetSection(nameof(GeminiOptions)));
 
         services.AddSingleton<SemanticKernelService>();
+
+        services.AddScoped<IAnalyzer, Analyzer>();
 
         return services;
     }
