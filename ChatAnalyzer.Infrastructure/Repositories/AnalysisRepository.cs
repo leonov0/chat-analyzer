@@ -10,7 +10,7 @@ public class AnalysisRepository(ApplicationDbContext dbContext) : IAnalysisRepos
     public async Task<Analysis?> GetByIdAsync(Guid id)
     {
         var analysis = await dbContext.Analyses
-            .Include(a => a.AnalysisMessages)
+            .Include(a => a.Messages)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         return analysis;

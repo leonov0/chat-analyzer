@@ -11,7 +11,7 @@ public class Analysis
     public Guid UserId { get; set; }
     public ApplicationUser User { get; set; } = null!;
 
-    public List<AnalysisMessage> AnalysisMessages { get; set; } = [];
+    public List<AnalysisMessage> Messages { get; set; } = [];
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

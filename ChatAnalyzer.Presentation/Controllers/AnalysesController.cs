@@ -43,7 +43,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
         return Ok(new AnalysisDto
         {
             Id = analysis.Id,
-            Messages = analysis.AnalysisMessages.Select(m => new AnalysisMessageDto
+            Messages = analysis.Messages.Select(m => new AnalysisMessageDto
             {
                 Id = m.Id,
                 Content = m.Content,
@@ -93,7 +93,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
             return Created($"/api/analyses/{analysis.Id}", new AnalysisDto
             {
                 Id = analysis.Id,
-                Messages = analysis.AnalysisMessages.Select(m => new AnalysisMessageDto
+                Messages = analysis.Messages.Select(m => new AnalysisMessageDto
                 {
                     Id = m.Id,
                     Content = m.Content,

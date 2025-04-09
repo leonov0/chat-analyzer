@@ -7,7 +7,7 @@ public class ChatHistory
     [JsonPropertyName("id")] public long Id { get; set; }
     [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
     [JsonPropertyName("type")] public string Type { get; set; } = string.Empty;
-    [JsonPropertyName("messages")] public List<ChatHistoryMessages> ChatHistoryMessages { get; set; } = [];
+    [JsonPropertyName("messages")] public List<ChatHistoryMessages> Messages { get; set; } = [];
 }
 
 public class ChatHistoryMessages
