@@ -8,7 +8,13 @@ public class AnalysisService(IAnalysisRepository repository) : IAnalysisService
 {
     public async Task<Analysis> CreateAsync(ChatHistory chatHistory, Guid userId)
     {
-        var analysis = await repository.CreateAsync(chatHistory, userId);
+        var analysis = new Analysis
+        {
+            Name = chatHistory.Name,
+            UserId = userId
+        };
+
+        await repository.CreateAsync(analysis);
 
         return analysis;
     }

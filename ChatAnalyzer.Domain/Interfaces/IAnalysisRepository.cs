@@ -4,7 +4,7 @@ namespace ChatAnalyzer.Domain.Interfaces;
 
 public interface IAnalysisRepository
 {
-    Task<Analysis> CreateAsync(ChatHistory chatHistory, Guid userId);
+    Task CreateAsync(Analysis analysis);
     Task<Analysis?> GetByIdAsync(Guid id);
     Task<IEnumerable<Analysis>> GetAllAsync(Guid userId);
 }
