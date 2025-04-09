@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Domain.Entities;
+using ChatAnalyzer.Presentation.Requests;
 using ChatAnalyzer.Presentation.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,13 +57,13 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateChat([FromForm] IFormFile file)
+    public async Task<IActionResult> CreateAnalysis([FromForm] CreateAnalysisDto createAnalysisDto)
     {
         ChatHistory? chatHistory;
 
         try
         {
-            await using var stream = file.OpenReadStream();
+            await using var stream = createAnalysisDto.File.OpenReadStream();
 
             chatHistory = await JsonSerializer.DeserializeAsync<ChatHistory>(stream);
         }
