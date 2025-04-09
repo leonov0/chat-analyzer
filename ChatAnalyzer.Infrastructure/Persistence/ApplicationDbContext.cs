@@ -6,4 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace ChatAnalyzer.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options);
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
+{
+    public DbSet<Analysis> Analyses { get; set; }
+    public DbSet<AnalysisMessage> AnalysisMessages { get; set; }
+}
