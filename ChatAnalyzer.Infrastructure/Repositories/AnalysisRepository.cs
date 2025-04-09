@@ -22,6 +22,7 @@ public class AnalysisRepository(ApplicationDbContext dbContext) : IAnalysisRepos
         var analysis = new Analysis
         {
             Id = Guid.NewGuid(),
+            Name = chatHistory.Name,
             UserId = userId,
             AnalysisMessages = messages
         };
