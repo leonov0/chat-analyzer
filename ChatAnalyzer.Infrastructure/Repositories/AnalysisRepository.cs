@@ -25,6 +25,13 @@ public class AnalysisRepository(ApplicationDbContext dbContext) : IAnalysisRepos
         return analyses;
     }
 
+    public async Task UpdateAsync(Analysis analysis)
+    {
+        dbContext.Analyses.Update(analysis);
+
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task CreateAsync(Analysis analysis)
     {
         await dbContext.Analyses.AddAsync(analysis);

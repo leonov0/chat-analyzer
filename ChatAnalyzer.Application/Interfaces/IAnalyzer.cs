@@ -4,5 +4,6 @@ namespace ChatAnalyzer.Application.Interfaces;
 
 public interface IAnalyzer
 {
-    Task<string> Analyze(Chat chat);
+    Task<string> AnalyzeAsync(Chat chat);
+    Task<string> AskAsync(Chat chat, string message);
 }

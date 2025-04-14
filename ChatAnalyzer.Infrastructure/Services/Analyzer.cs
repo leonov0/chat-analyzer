@@ -13,7 +13,7 @@ public class Analyzer(SemanticKernelService semanticKernelService, ILogger<Analy
 
     private const string FallbackMessage = "Sorry, I couldn't analyze the chat history. Please try again later.";
 
-    public async Task<string> Analyze(Chat chat)
+    public async Task<string> AnalyzeAsync(Chat chat)
     {
         var messages = string.Join("\n", chat.Messages
             .Select(m => $"{m.DateUnixtime} [{m.From}]: {string.Join(" ", m.TextEntities.Select(e => e.Text))}"));
@@ -24,13 +24,36 @@ public class Analyzer(SemanticKernelService semanticKernelService, ILogger<Analy
 
             if (!string.IsNullOrEmpty(result)) return result;
 
-            logger.LogError("The result is empty. Chat history: {chatHistory}", messages);
+            logger.LogError("The result is empty. Chat: {chat}", messages);
             return FallbackMessage;
         }
         catch (Exception ex)
         {
             logger.LogError(
-                "An error occurred while analyzing the chat history. Chat history: {chatHistory}. Exception: {exception}",
+                "An error occurred while analyzing the chat history. Chat: {chat}. Exception: {chat}",
+                messages, ex.Message);
+            return FallbackMessage;
+        }
+    }
+
+    public async Task<string> AskAsync(Chat chat, string message)
+    {
+        var messages = string.Join("\n", chat.Messages
+            .Select(m => $"{m.DateUnixtime} [{m.From}]: {string.Join(" ", m.TextEntities.Select(e => e.Text))}"));
+
+        try
+        {
+            var result = await semanticKernelService.GenerateReplyAsync(PromptHeader + messages + "\n" + message);
+
+            if (!string.IsNullOrEmpty(result)) return result;
+
+            logger.LogError("The result is empty. Chat: {chat}", messages);
+            return FallbackMessage;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+                "An error occurred while analyzing the chat history. Chat: {chat}. Exception: {chat}",
                 messages, ex.Message);
             return FallbackMessage;
         }

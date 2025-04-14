@@ -10,7 +10,7 @@ public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer,
 {
     public async Task<Analysis> CreateAsync(Chat chat, Guid userId)
     {
-        var analysisResult = await analyzer.Analyze(chat);
+        var analysisResult = await analyzer.AnalyzeAsync(chat);
 
         var analysis = new Analysis
         {
@@ -37,5 +37,22 @@ public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer,
         var analyses = await repository.GetAllAsync(userId);
 
         return analyses;
+    }
+
+    public async Task<Analysis> AskAsync(Analysis analysis, string message)
+    {
+        var chat = JsonSerializer.Deserialize<Chat>(cryptoService.Decrypt(analysis.EncryptedChat));
+
+        if (chat == null) throw new Exception("Chat not found.");
+
+        var reply = await analyzer.AskAsync(chat, message);
+
+        analysis.Messages.AddRange([
+            new AnalysisMessage { Content = message }, new AnalysisMessage { Content = reply }
+        ]);
+
+        await repository.UpdateAsync(analysis);
+
+        return analysis;
     }
 }

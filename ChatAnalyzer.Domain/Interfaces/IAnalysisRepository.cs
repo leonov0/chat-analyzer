@@ -7,4 +7,5 @@ public interface IAnalysisRepository
     Task CreateAsync(Analysis analysis);
     Task<Analysis?> GetByIdAsync(Guid id);
     Task<IEnumerable<Analysis>> GetAllAsync(Guid userId);
+    Task UpdateAsync(Analysis analysis);
 }

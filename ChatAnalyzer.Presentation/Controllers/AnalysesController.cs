@@ -25,6 +25,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
         return Ok(analyses.Select(a => new AnalysisPreviewDto
         {
             Id = a.Id,
+            Name = a.Name,
             CreatedAt = a.CreatedAt,
             UpdatedAt = a.UpdatedAt
         }));
@@ -44,6 +45,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
         return Ok(new AnalysisDto
         {
             Id = analysis.Id,
+            Name = analysis.Name,
             Messages = analysis.Messages.Select(m => new AnalysisMessageDto
             {
                 Id = m.Id,
@@ -94,6 +96,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
             return Created($"/api/analyses/{analysis.Id}", new AnalysisDto
             {
                 Id = analysis.Id,
+                Name = analysis.Name,
                 Messages = analysis.Messages.Select(m => new AnalysisMessageDto
                 {
                     Id = m.Id,
@@ -109,5 +112,34 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
         {
             return BadRequest(new { Title = "An error occurred while analyzing the chat. Please try again later." });
         }
+    }
+
+    [HttpPost("{id:guid}/messages")]
+    public async Task<IActionResult> AddMessage(Guid id, [FromBody] AddMessageDto addMessageDto)
+    {
+        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var analysis = await analysisService.GetByIdAsync(id);
+
+        if (analysis == null) return NotFound();
+
+        if (analysis.UserId != userId) return Forbid();
+
+        await analysisService.AskAsync(analysis, addMessageDto.Message);
+
+        return Ok(new AnalysisDto
+        {
+            Id = analysis.Id,
+            Name = analysis.Name,
+            Messages = analysis.Messages.Select(m => new AnalysisMessageDto
+            {
+                Id = m.Id,
+                Content = m.Content,
+                CreatedAt = m.CreatedAt,
+                UpdatedAt = m.UpdatedAt
+            }),
+            CreatedAt = analysis.CreatedAt,
+            UpdatedAt = analysis.UpdatedAt
+        });
     }
 }
