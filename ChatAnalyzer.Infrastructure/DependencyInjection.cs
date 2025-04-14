@@ -1,5 +1,6 @@
 ﻿using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Domain.Entities;
+using ChatAnalyzer.Domain.Interfaces;
 using ChatAnalyzer.Infrastructure.Options;
 using ChatAnalyzer.Infrastructure.Persistence;
 using ChatAnalyzer.Infrastructure.Services;
@@ -26,8 +27,10 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
 
         services.Configure<GeminiOptions>(configuration.GetSection(nameof(GeminiOptions)));
+        services.Configure<EncryptionOptions>(configuration.GetSection(nameof(EncryptionOptions)));
 
         services.AddSingleton<SemanticKernelService>();
+        services.AddSingleton<ICryptoService, CryptoService>();
 
         services.AddScoped<IAnalyzer, Analyzer>();
 
