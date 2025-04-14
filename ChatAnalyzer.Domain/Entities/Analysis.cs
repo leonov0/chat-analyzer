@@ -13,6 +13,8 @@ public class Analysis
 
     public List<AnalysisMessage> Messages { get; set; } = [];
 
+    public string EncryptedChat { get; set; } = string.Empty;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

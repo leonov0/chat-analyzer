@@ -1,10 +1,12 @@
-﻿using ChatAnalyzer.Application.Interfaces;
+﻿using System.Text.Json;
+using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Domain.Entities;
 using ChatAnalyzer.Domain.Interfaces;
 
 namespace ChatAnalyzer.Application.Services;
 
-public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer) : IAnalysisService
+public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer, ICryptoService cryptoService)
+    : IAnalysisService
 {
     public async Task<Analysis> CreateAsync(Chat chat, Guid userId)
     {
@@ -14,7 +16,8 @@ public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer)
         {
             Name = chat.Name,
             UserId = userId,
-            Messages = [new AnalysisMessage { Content = analysisResult }]
+            Messages = [new AnalysisMessage { Content = analysisResult }],
+            EncryptedChat = cryptoService.Encrypt(JsonSerializer.Serialize(chat))
         };
 
         await repository.CreateAsync(analysis);
