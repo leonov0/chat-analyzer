@@ -4,5 +4,5 @@ namespace ChatAnalyzer.Application.Interfaces;
 
 public interface IAnalyzer
 {
-    Task<string> Analyze(ChatHistory chatHistory);
+    Task<string> Analyze(Chat chat);
 }

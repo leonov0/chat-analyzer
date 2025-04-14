@@ -13,9 +13,9 @@ public class Analyzer(SemanticKernelService semanticKernelService, ILogger<Analy
 
     private const string FallbackMessage = "Sorry, I couldn't analyze the chat history. Please try again later.";
 
-    public async Task<string> Analyze(ChatHistory chatHistory)
+    public async Task<string> Analyze(Chat chat)
     {
-        var messages = string.Join("\n", chatHistory.Messages
+        var messages = string.Join("\n", chat.Messages
             .Select(m => $"{m.DateUnixtime} [{m.From}]: {string.Join(" ", m.TextEntities.Select(e => e.Text))}"));
 
         try

@@ -59,13 +59,13 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
     [HttpPost]
     public async Task<IActionResult> CreateAnalysis([FromForm] CreateAnalysisDto createAnalysisDto)
     {
-        ChatHistory? chatHistory;
+        Chat? chat;
 
         try
         {
             await using var stream = createAnalysisDto.File.OpenReadStream();
 
-            chatHistory = await JsonSerializer.DeserializeAsync<ChatHistory>(stream);
+            chat = await JsonSerializer.DeserializeAsync<Chat>(stream);
         }
         catch (Exception ex)
         {
@@ -73,12 +73,12 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
                 { Title = "An error occurred while processing the file.", Errors = new[] { ex.Message } });
         }
 
-        if (chatHistory == null) return BadRequest(new { Title = "Invalid JSON format." });
+        if (chat == null) return BadRequest(new { Title = "Invalid JSON format." });
 
         var validationResults = new List<ValidationResult>();
-        var context = new ValidationContext(chatHistory);
+        var context = new ValidationContext(chat);
 
-        if (!Validator.TryValidateObject(chatHistory, context, validationResults, true))
+        if (!Validator.TryValidateObject(chat, context, validationResults, true))
             return BadRequest(new
             {
                 Title = "Validation failed.",
@@ -89,7 +89,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
 
         try
         {
-            var analysis = await analysisService.CreateAsync(chatHistory, userId);
+            var analysis = await analysisService.CreateAsync(chat, userId);
 
             return Created($"/api/analyses/{analysis.Id}", new AnalysisDto
             {

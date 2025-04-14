@@ -6,13 +6,13 @@ namespace ChatAnalyzer.Application.Services;
 
 public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer) : IAnalysisService
 {
-    public async Task<Analysis> CreateAsync(ChatHistory chatHistory, Guid userId)
+    public async Task<Analysis> CreateAsync(Chat chat, Guid userId)
     {
-        var analysisResult = await analyzer.Analyze(chatHistory);
+        var analysisResult = await analyzer.Analyze(chat);
 
         var analysis = new Analysis
         {
-            Name = chatHistory.Name,
+            Name = chat.Name,
             UserId = userId,
             Messages = [new AnalysisMessage { Content = analysisResult }]
         };
