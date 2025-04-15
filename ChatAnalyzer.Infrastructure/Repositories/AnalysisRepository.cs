@@ -11,6 +11,7 @@ public class AnalysisRepository(ApplicationDbContext dbContext) : IAnalysisRepos
     {
         var analysis = await dbContext.Analyses
             .Include(a => a.Messages)
+            .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
 
         return analysis;
@@ -19,17 +20,11 @@ public class AnalysisRepository(ApplicationDbContext dbContext) : IAnalysisRepos
     public async Task<IEnumerable<Analysis>> GetAllAsync(Guid userId)
     {
         var analyses = await dbContext.Analyses
+            .AsNoTracking()
             .Where(a => a.UserId == userId)
             .ToListAsync();
 
         return analyses;
-    }
-
-    public async Task UpdateAsync(Analysis analysis)
-    {
-        dbContext.Analyses.Update(analysis);
-
-        await dbContext.SaveChangesAsync();
     }
 
     public async Task CreateAsync(Analysis analysis)

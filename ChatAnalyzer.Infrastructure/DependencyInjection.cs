@@ -3,6 +3,7 @@ using ChatAnalyzer.Domain.Entities;
 using ChatAnalyzer.Domain.Interfaces;
 using ChatAnalyzer.Infrastructure.Options;
 using ChatAnalyzer.Infrastructure.Persistence;
+using ChatAnalyzer.Infrastructure.Repositories;
 using ChatAnalyzer.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,9 @@ public static class DependencyInjection
 
         services.AddSingleton<SemanticKernelService>();
         services.AddSingleton<ICryptoService, CryptoService>();
+
+        services.AddScoped<IAnalysisRepository, AnalysisRepository>();
+        services.AddScoped<IAnalysisMessageRepository, AnalysisMessageRepository>();
 
         services.AddScoped<IAnalyzer, Analyzer>();
 

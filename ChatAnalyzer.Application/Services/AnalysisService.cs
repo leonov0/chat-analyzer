@@ -5,7 +5,11 @@ using ChatAnalyzer.Domain.Interfaces;
 
 namespace ChatAnalyzer.Application.Services;
 
-public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer, ICryptoService cryptoService)
+public class AnalysisService(
+    IAnalysisRepository analysisRepository,
+    IAnalyzer analyzer,
+    ICryptoService cryptoService,
+    IAnalysisMessageRepository analysisMessageRepository)
     : IAnalysisService
 {
     public async Task<Analysis> CreateAsync(Chat chat, Guid userId)
@@ -20,21 +24,21 @@ public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer,
             EncryptedChat = cryptoService.Encrypt(JsonSerializer.Serialize(chat))
         };
 
-        await repository.CreateAsync(analysis);
+        await analysisRepository.CreateAsync(analysis);
 
         return analysis;
     }
 
     public async Task<Analysis?> GetByIdAsync(Guid id)
     {
-        var analysis = await repository.GetByIdAsync(id);
+        var analysis = await analysisRepository.GetByIdAsync(id);
 
         return analysis;
     }
 
     public async Task<IEnumerable<Analysis>> GetAllAsync(Guid userId)
     {
-        var analyses = await repository.GetAllAsync(userId);
+        var analyses = await analysisRepository.GetAllAsync(userId);
 
         return analyses;
     }
@@ -47,11 +51,22 @@ public class AnalysisService(IAnalysisRepository repository, IAnalyzer analyzer,
 
         var reply = await analyzer.AskAsync(chat, message);
 
-        analysis.Messages.AddRange([
-            new AnalysisMessage { Content = message }, new AnalysisMessage { Content = reply }
-        ]);
+        var userMessage = new AnalysisMessage
+        {
+            AnalysisId = analysis.Id,
+            Content = message
+        };
 
-        await repository.UpdateAsync(analysis);
+        var replyMessage = new AnalysisMessage
+        {
+            AnalysisId = analysis.Id,
+            Content = reply
+        };
+
+        await analysisMessageRepository.CreateAsync(userMessage);
+        await analysisMessageRepository.CreateAsync(replyMessage);
+
+        analysis.Messages.AddRange(userMessage, replyMessage);
 
         return analysis;
     }
