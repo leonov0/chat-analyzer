@@ -15,13 +15,15 @@ public class AuthService(
 {
     public async Task RegisterAsync(string username, string email, string password)
     {
-        var isUsernameTaken = userManager.Users.Any(u => u.UserName == username);
+        var isUsernameTaken =
+            userManager.Users.Any(u => u.UserName != null && u.UserName.ToLower() == username.ToLower());
 
         if (isUsernameTaken) throw new UsernameAlreadyTakenException(username);
 
-        var isEmailTaken = userManager.Users.Any(u => u.Email == email);
+        var isEmailTaken = userManager.Users.Any(u => u.Email != null && u.Email.ToLower() == email.ToLower());
 
         if (isEmailTaken) throw new EmailTakenException(email);
+
 
         var user = new ApplicationUser
         {

@@ -12,6 +12,7 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 
 var app = builder.Build();
 

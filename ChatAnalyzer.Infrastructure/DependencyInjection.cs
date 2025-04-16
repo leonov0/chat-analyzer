@@ -1,5 +1,10 @@
-﻿using ChatAnalyzer.Domain.Entities;
+﻿using ChatAnalyzer.Application.Interfaces;
+using ChatAnalyzer.Domain.Entities;
+using ChatAnalyzer.Domain.Interfaces;
+using ChatAnalyzer.Infrastructure.Options;
 using ChatAnalyzer.Infrastructure.Persistence;
+using ChatAnalyzer.Infrastructure.Repositories;
+using ChatAnalyzer.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +26,17 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<GeminiOptions>(configuration.GetSection(nameof(GeminiOptions)));
+        services.Configure<EncryptionOptions>(configuration.GetSection(nameof(EncryptionOptions)));
+
+        services.AddSingleton<SemanticKernelService>();
+        services.AddSingleton<ICryptoService, CryptoService>();
+
+        services.AddScoped<IAnalysisRepository, AnalysisRepository>();
+        services.AddScoped<IAnalysisMessageRepository, AnalysisMessageRepository>();
+
+        services.AddScoped<IAnalyzer, Analyzer>();
 
         return services;
     }
