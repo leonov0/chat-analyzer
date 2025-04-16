@@ -50,6 +50,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
             {
                 Id = m.Id,
                 Content = m.Content,
+                MessageType = m.MessageType,
                 CreatedAt = m.CreatedAt,
                 UpdatedAt = m.UpdatedAt
             }),
@@ -101,6 +102,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
                 {
                     Id = m.Id,
                     Content = m.Content,
+                    MessageType = m.MessageType,
                     CreatedAt = m.CreatedAt,
                     UpdatedAt = m.UpdatedAt
                 }),
@@ -135,6 +137,7 @@ public class AnalysesController(IAnalysisService analysisService) : ControllerBa
             {
                 Id = m.Id,
                 Content = m.Content,
+                MessageType = m.MessageType,
                 CreatedAt = m.CreatedAt,
                 UpdatedAt = m.UpdatedAt
             }),
