@@ -20,7 +20,7 @@ public class AnalysisService(
         {
             Name = chat.Name,
             UserId = userId,
-            Messages = [new AnalysisMessage { Content = analysisResult }],
+            Messages = [new AnalysisMessage { Content = analysisResult, MessageType = MessageType.Received }],
             EncryptedChat = cryptoService.Encrypt(JsonSerializer.Serialize(chat))
         };
 
@@ -45,25 +45,28 @@ public class AnalysisService(
 
     public async Task<Analysis> AskAsync(Analysis analysis, string message)
     {
+        var userMessage = new AnalysisMessage
+        {
+            AnalysisId = analysis.Id,
+            Content = message,
+            MessageType = MessageType.Sent
+        };
+
+        await analysisMessageRepository.CreateAsync(userMessage);
+
         var chat = JsonSerializer.Deserialize<Chat>(cryptoService.Decrypt(analysis.EncryptedChat));
 
         if (chat == null) throw new Exception("Chat not found.");
 
         var reply = await analyzer.AskAsync(chat, message);
 
-        var userMessage = new AnalysisMessage
-        {
-            AnalysisId = analysis.Id,
-            Content = message
-        };
-
         var replyMessage = new AnalysisMessage
         {
             AnalysisId = analysis.Id,
-            Content = reply
+            Content = reply,
+            MessageType = MessageType.Received
         };
 
-        await analysisMessageRepository.CreateAsync(userMessage);
         await analysisMessageRepository.CreateAsync(replyMessage);
 
         analysis.Messages.AddRange(userMessage, replyMessage);
