@@ -1,7 +1,8 @@
 ﻿services:
   chat_analyzer_api:
     build:
-      context: .
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -9,6 +10,7 @@
       - ConnectionStrings__DefaultConnection=Host=chat_analyzer_db;Port=5432;Database=chat_analyzer_db;Username=user;Password=password
     depends_on:
       - chat_analyzer_db
+
   chat_analyzer_db:
     image: postgres:latest
     environment:

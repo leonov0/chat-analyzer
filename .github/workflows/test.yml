@@ -28,4 +28,4 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run xUnit tests
-        run: dotnet test ./ChatAnalyzer.UnitTests --configuration Release --no-build --logger trx --results-directory TestResults
+        run: dotnet test ./backend/ChatAnalyzer.UnitTests --configuration Release --no-build --logger trx --results-directory TestResults
