@@ -22,6 +22,18 @@
     volumes:
       - chat_analyzer_db_data:/var/lib/postgresql/data
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    depends_on:
+      - chat_analyzer_api
+
 volumes:
   chat_analyzer_db_data:
     driver: local
