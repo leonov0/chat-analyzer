@@ -21,19 +21,27 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:3000")
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
 });
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseCors("FrontendCorsPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors("FrontendCorsPolicy");
 
 app.Run();
