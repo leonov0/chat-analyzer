@@ -2,13 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.Presentation", "ChatAnalyzer.Presentation\ChatAnalyzer.Presentation.csproj", "{54E2CC5D-985D-43B6-AD90-D397B1728D68}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A588295F-620A-4B1B-A5DC-B22D4FBE542A}"
-	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
-		Dockerfile = Dockerfile
-		.dockerignore = .dockerignore
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.UnitTests", "ChatAnalyzer.UnitTests\ChatAnalyzer.UnitTests.csproj", "{87E3D161-C0B2-450A-91CA-D32456128C05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.Application", "ChatAnalyzer.Application\ChatAnalyzer.Application.csproj", "{48C54937-1D52-4902-85AD-3F80E44C8ACB}"

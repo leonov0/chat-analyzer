@@ -22,10 +22,13 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Restore dependencies
-        run: dotnet restore
+        working-directory: ./backend
+        run: dotnet restore ChatAnalyzer.sln
 
       - name: Build the project
-        run: dotnet build --configuration Release --no-restore
+        working-directory: ./backend
+        run: dotnet build ChatAnalyzer.sln --configuration Release --no-restore
 
       - name: Run xUnit tests
-        run: dotnet test ./ChatAnalyzer.UnitTests --configuration Release --no-build --logger trx --results-directory TestResults
+        working-directory: ./backend
+        run: dotnet test ChatAnalyzer.UnitTests --configuration Release --no-build --logger trx --results-directory TestResults
