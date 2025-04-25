@@ -2,12 +2,12 @@ export const routes = {
   login: "/login",
   register: "/register",
   logout: "/logout",
-  chats: "/chats",
+  analyses: "/analyses",
   home: "/",
   terms: "/terms",
   privacy: "/privacy",
 };
 
-export function getChatRoute(id: string) {
-  return `/chats/${id}`;
+export function getAnalysesRoute(id: string) {
+  return `/analyses/${id}`;
 }

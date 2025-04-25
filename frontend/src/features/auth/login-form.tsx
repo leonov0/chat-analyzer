@@ -43,7 +43,7 @@ export function LoginForm() {
     startTransition(async () => {
       try {
         await login(payload);
-        router.push(routes.chats);
+        router.push(routes.analyses);
       } catch (e) {
         toast.error(normalizeAxiosError(e));
       }

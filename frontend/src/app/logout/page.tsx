@@ -16,7 +16,7 @@ export default function SignOut() {
     <div className="grid min-h-dvh grid-rows-[auto_1fr_auto] gap-16">
       <header className="bg-background/60 sticky top-0 z-50 py-4 backdrop-blur-sm">
         <div className="container mx-auto">
-          <Link href={routes.chats} className="font-medium">
+          <Link href={routes.analyses} className="font-medium">
             ChatAnalyzer
           </Link>
         </div>

@@ -46,7 +46,7 @@ export function RegisterForm() {
     startTransition(async () => {
       try {
         await register(payload);
-        router.push(routes.chats);
+        router.push(routes.analyses);
       } catch (e) {
         toast.error(normalizeAxiosError(e));
       }

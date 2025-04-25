@@ -25,7 +25,7 @@ export function useAuth(middleware?: "guest" | "auth") {
     if (isLoading || middleware === undefined) return;
 
     if (middleware === "guest" && user) {
-      router.push(routes.chats);
+      router.push(routes.analyses);
     }
 
     if (middleware === "auth" && !user) {
