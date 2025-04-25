@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { FileText, LogOut } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type AnalysisPreview, CreateAnalysisForm } from "@/features/analyses";
-import { getAnalysesRoute } from "@/lib/routes";
+import { getAnalysesRoute, routes } from "@/lib/routes";
 
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
@@ -67,25 +67,32 @@ export function AnalysesSidebar({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <FileText />
+              Analyze New Chat
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Analyze New Chat</DialogTitle>
+              <DialogDescription>
+                Submit a new chat for analysis. If you do not know how to do
+                this, please refer to the documentation.
+              </DialogDescription>
+              <CreateAnalysisForm />
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
         <div className="grid grid-cols-[1fr_auto] gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <FileText />
-                Analyze New Chat
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Analyze New Chat</DialogTitle>
-                <DialogDescription>
-                  Submit a new chat for analysis. If you do not know how to do
-                  this, please refer to the documentation.
-                </DialogDescription>
-                <CreateAnalysisForm />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <Button variant="outline" asChild>
+            <Link href={routes.logout}>
+              <LogOut />
+              Log Out
+            </Link>
+          </Button>
           <ModeToggle />
         </div>
       </SidebarFooter>
