@@ -14,6 +14,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendCorsPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -22,5 +32,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("FrontendCorsPolicy");
 
 app.Run();

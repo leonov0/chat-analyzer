@@ -26,6 +26,8 @@
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://chat_analyzer_api:8080
     ports:
       - "3000:3000"
     environment:
