@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.Domain", "Chat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.Infrastructure", "ChatAnalyzer.Infrastructure\ChatAnalyzer.Infrastructure.csproj", "{351BFBE8-E7BC-4EB7-A9DD-E114DA255B5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatAnalyzer.IntegrationTests", "ChatAnalyzer.IntegrationTests\ChatAnalyzer.IntegrationTests.csproj", "{D4C6B10A-6C62-4A31-A681-4DDB78320D9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{351BFBE8-E7BC-4EB7-A9DD-E114DA255B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{351BFBE8-E7BC-4EB7-A9DD-E114DA255B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{351BFBE8-E7BC-4EB7-A9DD-E114DA255B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C6B10A-6C62-4A31-A681-4DDB78320D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C6B10A-6C62-4A31-A681-4DDB78320D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C6B10A-6C62-4A31-A681-4DDB78320D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C6B10A-6C62-4A31-A681-4DDB78320D9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
