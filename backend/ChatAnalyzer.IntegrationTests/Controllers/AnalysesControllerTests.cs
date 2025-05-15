@@ -1,7 +1,9 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
+using ChatAnalyzer.Presentation.Requests;
 using FluentAssertions;
+using static System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace ChatAnalyzer.IntegrationTests.Controllers;
 
@@ -13,7 +15,6 @@ public class AnalysesControllerTests(ChatAnalyzerWebApplicationFactory factory)
     [Fact]
     public async Task CreateAnalysis_ValidChat_ReturnsSuccess()
     {
-        // Arrange
         const string json = """
                             {
                               "name": "Test Chat",
@@ -38,17 +39,70 @@ public class AnalysesControllerTests(ChatAnalyzerWebApplicationFactory factory)
                               ]
                             }
                             """;
+
         var content = new MultipartFormDataContent();
         var fileContent = new ByteArrayContent(Encoding.UTF8.GetBytes(json));
-        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        fileContent.Headers.ContentType = Parse("application/json");
         content.Add(fileContent, "file", "chat.json");
 
-        // Act
         var response = await _client.PostAsync("/api/analyses", content);
 
-        // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Contain("Test Chat");
+    }
+
+    [Fact]
+    public async Task GetAll_ReturnsOkAndEmptyListInitially()
+    {
+        var response = await _client.GetAsync("/api/analyses");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("[");
+    }
+
+    [Fact]
+    public async Task GetChat_NonExistentId_ReturnsNotFound()
+    {
+        var fakeId = Guid.NewGuid();
+
+        var response = await _client.GetAsync($"/api/analyses/{fakeId}");
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task AddMessage_ToNonExistentAnalysis_ReturnsNotFound()
+    {
+        var fakeId = Guid.NewGuid();
+
+        var request = new AddMessageDto
+        {
+            Message = "What is the summary?"
+        };
+
+        var response = await _client.PostAsJsonAsync($"/api/analyses/{fakeId}/messages", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task CreateAnalysis_InvalidJson_ReturnsBadRequest()
+    {
+        const string badJson = """
+                               { "invalid": true
+                               """;
+
+        var content = new MultipartFormDataContent();
+        var fileContent = new ByteArrayContent(Encoding.UTF8.GetBytes(badJson));
+        fileContent.Headers.ContentType = Parse("application/json");
+        content.Add(fileContent, "file", "bad_chat.json");
+
+        var response = await _client.PostAsync("/api/analyses", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        responseBody.Should().Contain("An error occurred while processing the file");
     }
 }
