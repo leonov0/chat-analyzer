@@ -45,3 +45,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// This class is needed for integration tests to work properly
+public partial class Program;
