@@ -2,7 +2,11 @@ using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Application.Services;
 using ChatAnalyzer.Infrastructure;
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(int.Parse(port)); });
 
 builder.Services.AddControllers();
 
@@ -19,7 +23,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendCorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(builder.Configuration["Frontend:Url"])
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
