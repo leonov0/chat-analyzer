@@ -1,8 +1,17 @@
 using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Application.Services;
 using ChatAnalyzer.Infrastructure;
+using ChatAnalyzer.Presentation.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AppOptions>(builder.Configuration.GetSection(nameof(AppOptions)));
+
+var appOptions = builder.Configuration.GetRequiredSection(nameof(AppOptions)).Get<AppOptions>();
+
+if (appOptions == null) throw new InvalidOperationException("AppOptions configuration is missing or invalid.");
+
+builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(appOptions.Port); });
 
 builder.Services.AddControllers();
 
@@ -19,7 +28,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendCorsPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(appOptions.FrontendUrl)
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
