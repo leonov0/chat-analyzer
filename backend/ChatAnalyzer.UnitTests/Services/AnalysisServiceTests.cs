@@ -129,7 +129,7 @@ public class AnalysisServiceTests
         };
 
         _cryptoServiceMock.Setup(c => c.Decrypt(encryptedChat)).Returns(serializedChat);
-        _analyzerMock.Setup(a => a.AskAsync(It.IsAny<Chat>(), message)).ReturnsAsync(reply);
+        _analyzerMock.Setup(a => a.AskAsync(It.IsAny<Chat>(), message, analysis)).ReturnsAsync(reply);
         _messageRepositoryMock.Setup(m => m.CreateAsync(It.IsAny<AnalysisMessage>())).Returns(Task.CompletedTask);
 
         var result = await _analysisService.AskAsync(analysis, message);
