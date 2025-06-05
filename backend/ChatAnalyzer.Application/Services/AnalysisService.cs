@@ -58,7 +58,7 @@ public class AnalysisService(
 
         if (chat == null) throw new Exception("Chat not found.");
 
-        var reply = await analyzer.AskAsync(chat, message);
+        var reply = await analyzer.AskAsync(chat, message, analysis);
 
         var replyMessage = new AnalysisMessage
         {

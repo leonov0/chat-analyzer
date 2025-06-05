@@ -25,7 +25,7 @@ export default function ChatPage() {
 
     const input = formData.get("input") as string | null;
 
-    if (input === null || input.length === 0) return;
+    if (input === null || input.trim().length === 0) return;
 
     event.currentTarget.reset();
 
