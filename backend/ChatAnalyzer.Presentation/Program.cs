@@ -11,7 +11,10 @@ var appOptions = builder.Configuration.GetRequiredSection(nameof(AppOptions)).Ge
 
 if (appOptions == null) throw new InvalidOperationException("AppOptions configuration is missing or invalid.");
 
-builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(appOptions.Port); });
+var herokuPort = Environment.GetEnvironmentVariable("PORT");
+
+if (int.TryParse(herokuPort, out var dynamicPort))
+    builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(dynamicPort); });
 
 builder.Services.AddControllers();
 
