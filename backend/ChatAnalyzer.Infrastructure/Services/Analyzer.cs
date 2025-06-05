@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using ChatAnalyzer.Application.Interfaces;
 using ChatAnalyzer.Domain.Entities;
@@ -41,7 +42,9 @@ public class Analyzer(SemanticKernelService semanticKernelService, ILogger<Analy
 
     private const string FallbackMessage = "Sorry, I couldn't analyze the chat history. Please try again later.";
 
-    private readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = false };
+    private readonly JsonSerializerOptions _jsonOptions = new()
+        { WriteIndented = false, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
     private readonly ILogger<Analyzer> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     private readonly SemanticKernelService _semanticKernelService =
