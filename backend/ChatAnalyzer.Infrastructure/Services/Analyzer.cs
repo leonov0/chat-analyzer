@@ -7,21 +7,30 @@ namespace ChatAnalyzer.Infrastructure.Services;
 public class Analyzer(SemanticKernelService semanticKernelService, ILogger<Analyzer> logger) : IAnalyzer
 {
     private const string AnalyzePromptHeader = """
+                                               <context>
                                                You are a helpful assistant specialized in analyzing chat conversations.
-                                               Please analyze the following chat history. Your task is to:
+                                               Your task is to:
                                                1. Summarize the main topics discussed.
                                                2. Identify the overall tone (e.g., formal, casual, friendly, tense).
                                                3. Note any significant changes in tone or topic.
                                                Provide the summary in 3 to 5 concise sentences.
-
-                                               Chat log:
+                                               </context>
+                                               <chat_log>
+                                               {{YOUR_JSON_CHAT_LOG_HERE}}
+                                               </chat_log>
                                                """;
 
     private const string AskPromptHeader = """
+                                           <context>
                                            You are a helpful assistant analyzing chat history.
-                                           Below is a conversation log. Based on this context, please answer the user’s question that follows.
-
-                                           Chat log:
+                                           Based on the provided chat log, please answer the user’s question.
+                                           </context>
+                                           <chat_log>
+                                           {{YOUR_JSON_CHAT_LOG_HERE}}
+                                           </chat_log>
+                                           <user_question>
+                                           {{USER_QUESTION_HERE}}
+                                           </user_question>
                                            """;
 
     private const string FallbackMessage = "Sorry, I couldn't analyze the chat history. Please try again later.";
